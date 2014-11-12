@@ -6,7 +6,10 @@
 # This always returns 0, can't find out how this works.
 PREV_EXIT=$(echo $?)
 
+# Defaults for pushbullet API pushes
 API_KEY=$(cat ./api-key)
+
+
 
 # Fallback: execute with ./pushbullet-exit.sh $? to pass error along
 if [ -n "$1" ]; then
@@ -14,8 +17,12 @@ if [ -n "$1" ]; then
 fi
 
 if [ "$PREV_EXIT" -eq "0" ]; then
-    curl -u $API_KEY: -X POST https://api.pushbullet.com/v2/pushes --header 'Content-Type: application/json' --data-binary '{"type": "note", "title": "Command Successful", "body": "The command you had run on your computer has successfully completed."}' > /dev/null
+    TITLE="Command Successful."
+    BODY="The command run on your computer has successfully completed."
 else
-    curl -u $API_KEY: -X POST https://api.pushbullet.com/v2/pushes --header 'Content-Type: application/json' --data-binary '{"type": "note", "title": "Command Error '$PREV_EXIT'", "body": "The command you had run on your computer did not exit successfully."}' > /dev/null
+    TITLE="Error "$PREV_EXIT" on command."
+    BODY="The command run on your computer did not complete successfully."
 fi
+
+curl -u $API_KEY: -X POST https://api.pushbullet.com/v2/pushes --header 'Content-Type: application/json' --data-binary '{"type": "note", "title": "'"$TITLE"'", "body": "'"$BODY"'"}' > /dev/null
 exit 0
