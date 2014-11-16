@@ -12,7 +12,7 @@ a naive indicator.
 ##Requirements:  
 * `curl` must be installed
 * Your Pushbullet [Account token](https://www.pushbullet.com/account) must
-be in a file named `api-key` and placed in the current directory. 
+be in a file named `acct-token` and placed in the current directory. 
 This will be changed shortly (see "future features" below)
 
 ##Instructions:  
@@ -29,12 +29,12 @@ not run the script if the previous command fails.
 * A more versatile options system to better customize notifications
 * Being able to pipe `stdin` to the body of the notification
 * A proper `--help` message
-* A less hacky way to handle API keys
-###Future API key handling
-The current way to handle API keys (look for a file in the *current* directory) is needlessly hacky.
-Instead, I'm going to make a new way to find API keys, looking for them
+* A less hacky way to handle account tokens
+###Future Account Token Handling
+The current way to handle account tokens (look for a file in the *current* directory) is needlessly hacky.
+Instead, I'm going to make a new process, looking for tokens
 in this priority:  
 1. A `-k` flag when the script is called, manually specifying the key.
-2. An environment variable, likely called `PUSHBULLET_API_KEY`
-3. As the first line in `~/.config/pushbullet`. This is similar to how [pushbullet-bash](https://github.com/Red5d/pushbullet-bash/blob/master/pushbullet), another pushbullet bash script I found on GitHub, handles API keys.
-4. In a file called `api-key` in the current directory (The current way, which will eventually be deprecated)
+2. An environment variable, likely called `PUSHBULLET_ACCT_TOKEN`
+3. As the first line in `~/.config/pushbullet`. This is similar to how [pushbullet-bash](https://github.com/Red5d/pushbullet-bash/blob/master/pushbullet), another pushbullet bash script I found on GitHub, handles tokens.
+4. In a file called `acct-token` in the current directory (The current way, which will eventually be deprecated)
