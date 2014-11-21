@@ -18,10 +18,15 @@
 # 3. Config file  of the other pushbullet shell script
 # 4. Working directory: ./api-key (Will be deprecated)
 
+if [ "$1" == "--help" ]; then
+echo "Usage: pushbullet-exit.sh [OPTION]"
+exit 0
+fi
+
 ACCT_TOKEN=$(cat ./acct-token)
 
 # Fallback: execute with ./pushbullet-exit.sh $? to pass error along
-if [ -n "$1" ]; then
+if [ "$1" -lt 255 -a "$1" -ge 0 ]; then
     PREV_EXIT=$1
 fi
 
