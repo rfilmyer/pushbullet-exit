@@ -25,7 +25,10 @@ if [ -n "$1" ]; then
     PREV_EXIT=$1
 fi
 
-if [ "$PREV_EXIT" -eq "0" ]; then
+if [ -z "$PREV_EXIT" ]; then
+    TITLE="Command Complete."
+    BODY="The command has exited."
+elif [ "$PREV_EXIT" -eq "0" ]; then
     TITLE="Command Successful."
     BODY="The command run on your computer has successfully completed."
 else
@@ -35,5 +38,6 @@ fi
 
 # Is there a less hacky way to work with JSON in a shell script?
 # Works with v2 of the Pushbullet API.
-curl -u $ACCT_TOKEN: -X POST https://api.pushbullet.com/v2/pushes --header 'Content-Type: application/json' --data-binary '{"type": "note", "title": "'"$TITLE"'", "body": "'"$BODY"'"}' > /dev/null
+curl -s -S -u $ACCT_TOKEN: -X POST https://api.pushbullet.com/v2/pushes --header 'Content-Type: application/json' --data-binary '{"type": "note", "title": "'"$TITLE"'", "body": "'"$BODY"'"}' > /dev/null
+
 exit 0
