@@ -25,9 +25,34 @@ fi
 
 ACCT_TOKEN=$(cat ./acct-token)
 
+
+while getopts ":p" opt; do
+  case $opt in
+    p)
+      PASSTHRU=TRUE
+      ;;
+    [0-255])
+      PREV_EXIT=$1
+      CAUGHT_EXIT=TRUE
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      exit 1
+      ;;
+    :)
+      echo "Option -$OPTARG requires an argument." >&2
+      exit 1
+      ;;
+  esac
+  shift
+done
+
 # Fallback: execute with ./pushbullet-exit.sh $? to pass error along
-if [ "$1" -lt 255 -a "$1" -ge 0 ]; then
-    PREV_EXIT=$1
+if [ -n "$1" ]; then
+    if [ "$1" -lt 255 -a "$1" -ge 0 ]; then
+        PREV_EXIT=$1
+        CAUGHT_EXIT=TRUE
+    fi
 fi
 
 if [ -z "$PREV_EXIT" ]; then
@@ -45,4 +70,7 @@ fi
 # Works with v2 of the Pushbullet API.
 curl -s -S -u $ACCT_TOKEN: -X POST https://api.pushbullet.com/v2/pushes --header 'Content-Type: application/json' --data-binary '{"type": "note", "title": "'"$TITLE"'", "body": "'"$BODY"'"}' > /dev/null
 
+if [ "$PASSTHRU" = TRUE ]; then
+    exit $PREV_EXIT
+fi
 exit 0
