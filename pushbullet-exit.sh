@@ -24,27 +24,33 @@ exit 0
 fi
 
 ACCT_TOKEN=$(cat ./acct-token)
+CAUGHT_EXIT=FALSE
+MSG_GIVEN=TRUE #Indicates whether the user has supplied a custom message
 
-
-while getopts ":p" opt; do
-  case $opt in
-    p)
-      PASSTHRU=TRUE
-      ;;
-    [0-255])
-      PREV_EXIT=$1
-      CAUGHT_EXIT=TRUE
-      ;;
-    \?)
-      echo "Invalid option: -$OPTARG" >&2
-      exit 1
-      ;;
-    :)
-      echo "Option -$OPTARG requires an argument." >&2
-      exit 1
-      ;;
-  esac
-  shift
+while getopts ":pm:" opt; do
+    case $opt in
+        p)
+            PASSTHRU=TRUE
+            ;;
+        m)
+            CUSTOM_MESSAGE=($OPTARG)
+            MSG_GIVEN=TRUE
+            shift
+            ;;
+        [0-255])
+            PREV_EXIT=$1
+            CAUGHT_EXIT=TRUE
+            ;;
+        \?)
+            echo "Invalid option: -$OPTARG" >&2
+            exit 1
+            ;;
+        :)
+            echo "Option -$OPTARG requires an argument." >&2
+            exit 1
+            ;;
+    esac
+    shift
 done
 
 # Fallback: execute with ./pushbullet-exit.sh $? to pass error along
@@ -55,15 +61,21 @@ if [ -n "$1" ]; then
     fi
 fi
 
-if [ -z "$PREV_EXIT" ]; then
+if [ "$CAUGHT_EXIT" = FALSE ]; then
     TITLE="Command Complete."
     BODY="The command has exited."
 elif [ "$PREV_EXIT" -eq "0" ]; then
     TITLE="Command Successful."
     BODY="The command run on your computer has successfully completed."
-else
+elif [ "$PREV_EXIT" -lt "255" -a "$PREV_EXIT" -ge "1" ]; then
     TITLE="Error "$PREV_EXIT" on command."
     BODY="The command run on your computer did not complete successfully."
+else
+    echo "Invalid exit status: $?" >&2
+fi
+
+if [ "$MSG_GIVEN" = "TRUE" ]; then
+    BODY=$CUSTOM_MESSAGE
 fi
 
 # Is there a less hacky way to work with JSON in a shell script?
