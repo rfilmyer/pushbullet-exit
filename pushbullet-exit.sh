@@ -23,11 +23,14 @@ echo "Usage: pushbullet-exit.sh [OPTION]"
 exit 0
 fi
 
-ACCT_TOKEN=$(cat ./acct-token)
 CAUGHT_EXIT=FALSE
 MSG_GIVEN=TRUE #Indicates whether the user has supplied a custom message
 
-while getopts ":pm:" opt; do
+if [ -r ./acct-token ]; then
+ACCT_TOKEN=$(cat ./acct-token)
+fi
+
+while getopts ":pm:t:" opt; do
     case $opt in
         p)
             PASSTHRU=TRUE
@@ -37,10 +40,15 @@ while getopts ":pm:" opt; do
             MSG_GIVEN=TRUE
             shift
             ;;
-        [0-255])
-            PREV_EXIT=$1
-            CAUGHT_EXIT=TRUE
+        t)
+            ACCT_TOKEN=($OPTARG)
+            shift
             ;;
+#        [0-255])
+#            PREV_EXIT=$1
+#            CAUGHT_EXIT=TRUE
+#            echo "Caught PREV_EXIT in getopts:" $PREV_EXIT
+#            ;;
         \?)
             echo "Invalid option: -$OPTARG" >&2
             exit 1
@@ -51,6 +59,8 @@ while getopts ":pm:" opt; do
             ;;
     esac
     shift
+#    echo "current args: $@"
+    OPTIND=1
 done
 
 # Fallback: execute with ./pushbullet-exit.sh $? to pass error along
@@ -58,6 +68,7 @@ if [ -n "$1" ]; then
     if [ "$1" -lt 255 -a "$1" -ge 0 ]; then
         PREV_EXIT=$1
         CAUGHT_EXIT=TRUE
+#        echo "Caught PREV_EXIT in fallback:" $PREV_EXIT
     fi
 fi
 
@@ -72,10 +83,16 @@ elif [ "$PREV_EXIT" -lt "255" -a "$PREV_EXIT" -ge "1" ]; then
     BODY="The command run on your computer did not complete successfully."
 else
     echo "Invalid exit status: $?" >&2
+    exit 3
 fi
 
 if [ "$MSG_GIVEN" = "TRUE" ]; then
     BODY=$CUSTOM_MESSAGE
+fi
+
+if [ -z "$ACCT_TOKEN" ]; then
+   echo "Could not find account token" >&2
+   exit 2
 fi
 
 # Is there a less hacky way to work with JSON in a shell script?
