@@ -19,8 +19,17 @@
 # 4. Working directory: ./api-key (Will be deprecated)
 
 if [ "$1" == "--help" ]; then
-echo "Usage: pushbullet-exit.sh [OPTION]"
-exit 0
+    echo "Usage: pushbullet-exit.sh [OPTION] [EXIT CODE]"
+    echo "Shell script to send a pushbullet notification upon running."
+    echo "To use the previous command's exit code, use \$?"
+    echo "Example: make; ./pushbullet-exit -m \"make install complete\" \$?"
+    echo ""
+    echo "Options:"
+    echo "-p  Pass through the exit code of the previous program."
+    echo "      Useful for stringing together commands with &&."
+    echo "-m  Puts a custom message in the body of the push notification."
+    echo "-t  Uses specified account token."
+    exit 0
 fi
 
 CAUGHT_EXIT=FALSE
