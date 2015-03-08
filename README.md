@@ -30,6 +30,7 @@ not run the script if the previous command fails.
 * Being able to pipe `stdin` to the body of the notification
 * A proper `--help` message
 * A less hacky way to handle account tokens
+
 ###Future Account Token Handling
 The current way to handle account tokens (look for a file in the *current* directory) is needlessly hacky.
 Instead, I'm going to make a new process, looking for tokens
