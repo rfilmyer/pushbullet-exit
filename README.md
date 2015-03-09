@@ -35,6 +35,7 @@ not run the script if the previous command fails.
 The current way to handle account tokens (look for a file in the *current* directory) is needlessly hacky.
 Instead, I'm going to make a new process, looking for tokens
 in this priority:  
+
 1. A `-k` flag when the script is called, manually specifying the key.
 2. An environment variable, likely called `PUSHBULLET_ACCT_TOKEN`
 3. As the first line in `~/.config/pushbullet`. This is similar to how [pushbullet-bash](https://github.com/Red5d/pushbullet-bash/blob/master/pushbullet), another pushbullet bash script I found on GitHub, handles tokens.
