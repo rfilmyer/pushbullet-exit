@@ -39,13 +39,17 @@ MSG_GIVEN=TRUE #Indicates whether the user has supplied a custom message
 
 #Is the API token in a file?
 if [ -r $KEY_FILE ]; then
-    source $KEY_FILE
-    ACCT_TOKEN=$API_KEY #poor variable name choice
+    source $KEY_FILE  #Is this safe?
+    ACCT_TOKEN=$API_KEY #Pushbullet official phrasing vs pushbullet-bash's
 elif [ -r ./acct-token ]; then
     ACCT_TOKEN=$(cat ./acct-token)
 fi
 
-#Is it in an environmental variable?
+#Check environment variable
+if [ -n $PUSHBULLET_ACCT_TOKEN ]; then
+    ACCT_TOKEN=$PUSHBULLET_ACCT_TOKEN
+fi
+
 
 while getopts ":pm:t:" opt; do
     case $opt in
