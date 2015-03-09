@@ -30,7 +30,7 @@ This branch is reworking the handling of account tokens. Tokens are looked for i
 1. A `-t` flag when the script is called, manually specifying the key.
 2. An environment variable called `PUSHBULLET_ACCT_TOKEN`
 3. As the first line in `~/.config/pushbullet`. This is similar to how [pushbullet-bash](https://github.com/Red5d/pushbullet-bash/blob/master/pushbullet), another pushbullet bash script on GitHub, handles tokens.
-4. In a file called `acct-token` in the current directory (The current way, which will eventually be deprecated)
+4. In a file called `acct-token` in the current directory (Will be deprecated on April 1, 2015.)
 
 ##Future Features:  
 * A more versatile options system to better customize notifications

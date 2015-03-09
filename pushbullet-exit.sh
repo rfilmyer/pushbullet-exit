@@ -43,6 +43,7 @@ if [ -r $KEY_FILE ]; then
     ACCT_TOKEN=$API_KEY #Pushbullet official phrasing vs pushbullet-bash's
 elif [ -r ./acct-token ]; then
     ACCT_TOKEN=$(cat ./acct-token)
+    echo "./acct-token lookup is deprecated, will be removed April 1, 2015" >&2
 fi
 
 #Check environment variable
