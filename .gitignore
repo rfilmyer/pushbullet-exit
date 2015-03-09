@@ -1,3 +1,6 @@
 # File with Pushbullet API key
 acct-token
+
+#Crumbs from open text editors
 *.swp
+.zedstate

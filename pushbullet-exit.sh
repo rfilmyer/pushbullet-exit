@@ -18,6 +18,8 @@
 # 3. Config file  of the other pushbullet shell script
 # 4. Working directory: ./api-key (Will be deprecated)
 
+KEY_FILE=~/.config/pushbullet #should mirror pushbullet-bash's location
+
 if [ "$1" == "--help" ]; then
     echo "Usage: pushbullet-exit.sh [OPTION] [EXIT CODE]"
     echo "Shell script to send a pushbullet notification upon running."
@@ -35,9 +37,20 @@ fi
 CAUGHT_EXIT=FALSE
 MSG_GIVEN=TRUE #Indicates whether the user has supplied a custom message
 
-if [ -r ./acct-token ]; then
-ACCT_TOKEN=$(cat ./acct-token)
+#Is the API token in a file?
+if [ -r $KEY_FILE ]; then
+    source $KEY_FILE  #Is this safe?
+    ACCT_TOKEN=$API_KEY #Pushbullet official phrasing vs pushbullet-bash's
+elif [ -r ./acct-token ]; then
+    ACCT_TOKEN=$(cat ./acct-token)
+    echo "./acct-token lookup is deprecated, will be removed April 1, 2015" >&2
 fi
+
+#Check environment variable
+if [ -n $PUSHBULLET_ACCT_TOKEN ]; then
+    ACCT_TOKEN=$PUSHBULLET_ACCT_TOKEN
+fi
+
 
 while getopts ":pm:t:" opt; do
     case $opt in
