@@ -47,7 +47,7 @@ elif [ -r ./acct-token ]; then
 fi
 
 #Check environment variable
-if [ -n $PUSHBULLET_ACCT_TOKEN ]; then
+if [ -n "$PUSHBULLET_ACCT_TOKEN" ]; then
     ACCT_TOKEN=$PUSHBULLET_ACCT_TOKEN
 fi
 
