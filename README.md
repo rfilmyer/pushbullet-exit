@@ -25,9 +25,9 @@ It's generally useful to call the script as part of a larget command, eg
 not run the script if the previous command fails.
 
 ##Account Token Handling
-This branch is reworking the handling of account tokens. Tokens are looked for in this priority: 
-1. (*pending*) A `-k` flag when the script is called, manually specifying the key.
-2. (*pending*) An environment variable, likely called `PUSHBULLET_ACCT_TOKEN`
+This branch is reworking the handling of account tokens. Tokens are looked for in this priority:  
+1. A `-t` flag when the script is called, manually specifying the key.
+2. An environment variable called `PUSHBULLET_ACCT_TOKEN`
 3. As the first line in `~/.config/pushbullet`. This is similar to how [pushbullet-bash](https://github.com/Red5d/pushbullet-bash/blob/master/pushbullet), another pushbullet bash script I found on GitHub, handles tokens.
 4. In a file called `acct-token` in the current directory (The current way, which will eventually be deprecated)
 
