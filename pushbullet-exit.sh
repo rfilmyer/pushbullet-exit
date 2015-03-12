@@ -58,12 +58,12 @@ while getopts ":pm:t:" opt; do
             PASSTHRU=TRUE
             ;;
         m)
-            CUSTOM_MESSAGE=($OPTARG)
+            CUSTOM_MESSAGE=("$OPTARG")
             MSG_GIVEN=TRUE
             shift
             ;;
         t)
-            ACCT_TOKEN=($OPTARG)
+            ACCT_TOKEN=("$OPTARG")
             shift
             ;;
 #        [0-255])
@@ -119,7 +119,8 @@ fi
 
 # Is there a less hacky way to work with JSON in a shell script?
 # Works with v2 of the Pushbullet API.
-
+echo "body"
+echo "$BODY"
 #Assemble the JSON!
 JSON='{"type": "note", "title": "'"$TITLE"'", "body": "'"$BODY"'"}'
 curl -s -S \
