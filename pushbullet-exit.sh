@@ -119,7 +119,15 @@ fi
 
 # Is there a less hacky way to work with JSON in a shell script?
 # Works with v2 of the Pushbullet API.
-curl -s -S -u $ACCT_TOKEN: -X POST https://api.pushbullet.com/v2/pushes --header 'Content-Type: application/json' --data-binary '{"type": "note", "title": "'"$TITLE"'", "body": "'"$BODY"'"}' > /dev/null
+
+#Assemble the JSON!
+JSON='{"type": "note", "title": "'"$TITLE"'", "body": "'"$BODY"'"}'
+curl -s -S \
+  -u $ACCT_TOKEN: \
+  -X POST https://api.pushbullet.com/v2/pushes\
+  --header 'Content-Type: application/json' \
+  --data-binary "$JSON"
+
 
 if [ "$PASSTHRU" = TRUE ]; then
     exit $PREV_EXIT
