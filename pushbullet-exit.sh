@@ -122,7 +122,9 @@ JSON='{"type": "note", "title": "'"$TITLE"'", "body": "'"$BODY"'"}'
 
 #Try to capture both HTTP status and output using redirection
 #Works with V2 of the Pushbullet API.
-CURL_OUTPUT="$(curl -s -S \
+
+HTTP_CODE="$(curl -s -S \
+  -w "%{http_code}" -o /dev/null \
   --header 'Authorization: Bearer '"$ACCT_TOKEN" \
   -X POST https://api.pushbullet.com/v2/pushes \
   --header 'Content-Type: application/json' \
