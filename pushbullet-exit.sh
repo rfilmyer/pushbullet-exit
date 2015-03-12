@@ -130,6 +130,22 @@ HTTP_CODE="$(curl -s -S \
   --header 'Content-Type: application/json' \
   --data-binary "$JSON")"
 
+if [ "$HTTP_CODE" -eq "400" ]; then
+  echo "Error from Pushbullet: Bad Request" >&2
+  exit 4
+elif [ "$HTTP_CODE" -eq "401" ]; then
+  echo "Error from Pushbullet: No valid access token provided" >&2
+  exit 5
+elif [ "$HTTP_CODE" -eq "403" ]; then
+  echo "Error from Pushbullet: Access token not valid for request" >&2
+  exit 6
+elif [ "$HTTP_CODE" -eq "404" ]; then
+  echo "Error from Pushbullet: The requested item doesn't exist (404)" >&2
+  exit 7
+elif [ "$HTTP_CODE" -ge "500" -a "$HTTP_CODE" -lt "600" ]; then
+  echo "Error from Pushbullet: Error on Pushbullet's side ($HTTP_CODE)" >&2
+  exit 8
+fi
 
 if [ "$PASSTHRU" = TRUE ]; then
     exit $PREV_EXIT
