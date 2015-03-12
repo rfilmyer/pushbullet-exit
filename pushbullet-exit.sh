@@ -120,12 +120,13 @@ fi
 #Assemble the JSON!
 JSON='{"type": "note", "title": "'"$TITLE"'", "body": "'"$BODY"'"}'
 
+#Try to capture both HTTP status and output using redirection
 #Works with V2 of the Pushbullet API.
-curl -s -S \
+CURL_OUTPUT="$(curl -s -S \
   --header 'Authorization: Bearer '"$ACCT_TOKEN" \
   -X POST https://api.pushbullet.com/v2/pushes \
   --header 'Content-Type: application/json' \
-  --data-binary "$JSON" > /dev/null
+  --data-binary "$JSON")"
 
 
 if [ "$PASSTHRU" = TRUE ]; then
