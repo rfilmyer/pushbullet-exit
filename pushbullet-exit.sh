@@ -58,12 +58,12 @@ while getopts ":pm:t:" opt; do
             PASSTHRU=TRUE
             ;;
         m)
-            CUSTOM_MESSAGE=($OPTARG)
+            CUSTOM_MESSAGE=("$OPTARG")
             MSG_GIVEN=TRUE
             shift
             ;;
         t)
-            ACCT_TOKEN=($OPTARG)
+            ACCT_TOKEN=("$OPTARG")
             shift
             ;;
 #        [0-255])
@@ -117,9 +117,16 @@ if [ -z "$ACCT_TOKEN" ]; then
    exit 2
 fi
 
-# Is there a less hacky way to work with JSON in a shell script?
-# Works with v2 of the Pushbullet API.
-curl -s -S -u $ACCT_TOKEN: -X POST https://api.pushbullet.com/v2/pushes --header 'Content-Type: application/json' --data-binary '{"type": "note", "title": "'"$TITLE"'", "body": "'"$BODY"'"}' > /dev/null
+#Assemble the JSON!
+JSON='{"type": "note", "title": "'"$TITLE"'", "body": "'"$BODY"'"}'
+
+#Works with V2 of the Pushbullet API.
+curl -s -S \
+  -u $ACCT_TOKEN: \
+  -X POST https://api.pushbullet.com/v2/pushes\
+  --header 'Content-Type: application/json' \
+  --data-binary "$JSON" > /dev/null
+
 
 if [ "$PASSTHRU" = TRUE ]; then
     exit $PREV_EXIT
