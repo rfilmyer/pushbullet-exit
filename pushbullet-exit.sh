@@ -122,8 +122,8 @@ JSON='{"type": "note", "title": "'"$TITLE"'", "body": "'"$BODY"'"}'
 
 #Works with V2 of the Pushbullet API.
 curl -s -S \
-  -u $ACCT_TOKEN: \
-  -X POST https://api.pushbullet.com/v2/pushes\
+  --header 'Authorization: Bearer '"$ACCT_TOKEN" \
+  -X POST https://api.pushbullet.com/v2/pushes \
   --header 'Content-Type: application/json' \
   --data-binary "$JSON" > /dev/null
 
